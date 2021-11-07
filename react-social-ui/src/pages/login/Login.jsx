@@ -11,7 +11,6 @@ export default function Login() {
 
   const handleClick = (e) => {
     e.preventDefault();
-    console.log(email.current.value);
     loginCall(
       { email: email.current.value, password: password.current.value },
       dispatch
@@ -22,9 +21,9 @@ export default function Login() {
     <div className="login">
       <div className="loginWrapper">
         <div className="loginLeft">
-          <h3 className="loginLogo">Friendsocial</h3>
+          <h3 className="loginLogo">Lamasocial</h3>
           <span className="loginDesc">
-            Connect with friends and the world around you on Friendsocial.
+            Connect with friends and the world around you on Lamasocial.
           </span>
         </div>
         <div className="loginRight">
