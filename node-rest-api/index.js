@@ -14,11 +14,10 @@ const path = require("path");
 dotenv.config();
 
 mongoose.connect(
-  process.env.MONGO_URL,
-  { useNewUrlParser: true, useUnifiedTopology: true },
-  () => {
-    console.log("Connected to MongoDB");
-  }
+    process.env.MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true },
+    () => {
+        console.log("Connected to MongoDB");
+    }
 );
 app.use("/images", express.static(path.join(__dirname, "public/images")));
 
@@ -28,27 +27,36 @@ app.use(helmet());
 app.use(morgan("common"));
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "public/images");
-  },
-  filename: (req, file, cb) => {
-    cb(null, req.body.name);
-  },
+    destination: (req, file, cb) => {
+        cb(null, "public/images");
+    },
+    filename: (req, file, cb) => {
+        cb(null, req.body.name);
+    },
 });
 
 const upload = multer({ storage: storage });
 app.post("/api/upload", upload.single("file"), (req, res) => {
-  try {
-    return res.status(200).json("File uploded successfully");
-  } catch (error) {
-    console.error(error);
-  }
+    try {
+        return res.status(200).json("File uploded successfully");
+    } catch (error) {
+        console.error(error);
+    }
 });
 
 app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
 app.use("/api/posts", postRoute);
 
-app.listen(8800, () => {
-  console.log("Backend server is running!");
+app.use(
+    express.static(path.join(__dirname, "/react-social-ui/build"))
+);
+
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "/react-social-ui/build", "index.html"));
+});
+
+
+app.listen(process.env.PORT || 8800, () => {
+    console.log("Backend server is running!");
 });
